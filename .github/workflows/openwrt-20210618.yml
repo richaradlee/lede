@@ -49,6 +49,8 @@ jobs:
           cd package/lean
           git clone https://github.com/jerrykuku/lua-maxminddb.git  #git lua-maxminddb 依赖
           git clone https://github.com/jerrykuku/luci-app-vssr.git
+          rm -rf luci-theme-argon  
+          git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git  
          
       - name: Update feeds
         run: |
@@ -175,6 +177,7 @@ jobs:
           CONFIG_PACKAGE_luci-app-openclash=y
           CONFIG_PACKAGE_luci-app-jd-dailybonus=y
           CONFIG_PACKAGE_luci-app-adguardhome=y
+          CONFIG_PACKAGE_luci-app-eqos=y
           EOF
          
           # LuCI主题:
@@ -187,6 +190,10 @@ jobs:
           CONFIG_PACKAGE_luci-theme-argon_new=y
           CONFIG_PACKAGE_luci-theme-edge=y
           CONFIG_PACKAGE_luci-theme-atmaterial=y
+          CONFIG_PACKAGE_luci-theme-opentomcat=y
+          CONFIG_PACKAGE_luci-theme-opentomato=y
+          CONFIG_PACKAGE_luci-theme-atmaterial=y
+          CONFIG_PACKAGE_luci-theme-ifit=y
           EOF
           
           # 常用软件包:
