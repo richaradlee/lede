@@ -173,7 +173,7 @@ jobs:
           CONFIG_PACKAGE_luci-app-vssr=y
           CONFIG_PACKAGE_luci-app-openclash=y
           CONFIG_PACKAGE_luci-app-jd-dailybonus=y
-          CONFIG_PACKAGE_ luci-app-adguardhome=y
+          CONFIG_PACKAGE_luci-app-adguardhome=y
           EOF
          
           # LuCI主题:
@@ -211,14 +211,14 @@ jobs:
           sed -i 's/^[ \t]*//g' ./.config
           make defconfig
       
-      - name: Make download
+      - name: Make download -j8
         run: |
           make download 
           find dl -size -1024c -exec rm -f {} \;
       
       - name: Compile firmware
         run: |
-          make -j$(nproc) || make -j1 V=99
+          make -j$(nproc) || make -j1 V=s
           echo "======================="
           echo "Space usage:"
           echo "======================="
