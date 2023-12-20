@@ -50,7 +50,7 @@ jobs:
             
       - name: 自定义插件主题
         run: |
-          git clone https://github.com/sirpdboy/netspeedtest.git package/netspeedtest
+          # git clone https://github.com/sirpdboy/netspeedtest.git package/netspeedtest
           # git clone https://github.com/richaradlee/small-package
           # git clone https://github.com/jerrykuku/lua-maxminddb.git  #git lua-maxminddb 依赖
           # git clone https://github.com/jerrykuku/luci-app-vssr.git
@@ -158,7 +158,7 @@ jobs:
           CONFIG_PACKAGE_luci-app-minidlna=y
           CONFIG_PACKAGE_luci-app-openvpn=y
           CONFIG_PACKAGE_luci-app-openvpn-server=y
-          CONFIG_PACKAGE_luci-app-qbittorrent=y
+          # CONFIG_PACKAGE_luci-app-qbittorrent=y
           # CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Kcptun=y
           # CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Shadowsocks=y
           # CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_ShadowsocksR_Server=y
@@ -175,7 +175,7 @@ jobs:
           CONFIG_PACKAGE_luci-app-netdata=y
           CONFIG_PACKAGE_luci-app-smartdns=y
           CONFIG_PACKAGE_luci-app-watchcat=y
-          CONFIG_PACKAGE_luci-app-transmission=y
+          # CONFIG_PACKAGE_luci-app-transmission=y
           CONFIG_PACKAGE_luci-app-cpufreq=y
           # CONFIG_PACKAGE_luci-app-baidupcs-web=y
           # CONFIG_PACKAGE_luci-app-mwan3=y
@@ -194,10 +194,10 @@ jobs:
           # CONFIG_PACKAGE_luci-app-aliyundrive-webdav=y
           # CONFIG_PACKAGE_luci-app-unblockneteasemusic=y
           CONFIG_PACKAGE_luci-app-mosdns=y
-          CONFIG_PACKAGE_luci-app-udpxy=y
-          CONFIG_PACKAGE_luci-app-store=y 
+          # CONFIG_PACKAGE_luci-app-udpxy=y
+          # CONFIG_PACKAGE_luci-app-store=y 
           CONFIG_PACKAGE_luci-app-advanced=y
-          CONFIG_PACKAGE_luci-app-netspeedtest=y
+          # CONFIG_PACKAGE_luci-app-netspeedtest=y
           EOF
          
           # LuCI主题:
