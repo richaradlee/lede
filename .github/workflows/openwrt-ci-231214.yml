@@ -198,6 +198,7 @@ jobs:
           # CONFIG_PACKAGE_luci-app-store=y 
           CONFIG_PACKAGE_luci-app-advanced=y
           # CONFIG_PACKAGE_luci-app-netspeedtest=y
+          CONFIG_PACKAGE_luci-app-msd_lite=y
           EOF
          
           # LuCI主题:
