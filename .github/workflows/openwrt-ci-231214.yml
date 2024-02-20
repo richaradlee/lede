@@ -233,7 +233,6 @@ jobs:
           # 
           # ========================固件定制部分结束========================
           # 
-          sed -i 's/iperf3-ssl[[:space:]]*//g' openwrt/target/linux/x86/Makefile
           sed -i 's/^[ \t]*//g' ./.config
           make defconfig
       
