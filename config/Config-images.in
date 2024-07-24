@@ -310,8 +310,8 @@ menu "Target Images"
 		int "Root filesystem partition size (in MiB)"
 		depends on USES_ROOTFS_PART || TARGET_ROOTFS_EXT4FS
 		default 232 if TARGET_loongarch64
-		default 640 if TARGET_x86
-		default 640
+		default 400 if TARGET_x86
+		default 160
 		help
 		  Select the root filesystem partition size.
 
