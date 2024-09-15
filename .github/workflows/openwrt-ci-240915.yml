@@ -22,11 +22,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      
-      #- name: Checkout OpenWrt
-       # uses: actions/checkout@v3
-        #with:
-         # ref: master
+      - name: Checkout OpenWrt
+        uses: actions/upload-artifact@v3
+        with:
+          ref: master
          # ↑↑↑ 改成你的分分支分支支名, 一般是master
       - name: Initialization environment
         env:
@@ -50,8 +49,8 @@ jobs:
           
           df -h
             
-      - name: Checkout OpenWrt
-        uses: actions/checkout@v3
+      #- name: Checkout OpenWrt
+       # uses: actions/checkout@v3
 
       - name: Update feeds
         run: |
