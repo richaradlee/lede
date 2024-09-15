@@ -6,45 +6,27 @@
 # 
 # <https://github.com/KFERMercer/OpenWrt-CI>
 #
-
 name: OpenWrt-CI
-
-#on:
- # push:
-  #  branches: 
-      - master
-  # ↑↑↑ 改成你的分支名, 一般是master
-  # schedule:
-  # - cron: 0 20 * * *
-  # release:
-  # types: [published]
-
-#jobs:
- # build:
-  #  runs-on: ubuntu-latest
-
-   # steps:
-    #  - name: Checkout
-     #   uses: actions/checkout@master
-      #  with:
-       #   ref: master
-        # ↑↑↑ 改成你的分分支分支支名, 一般是master
 on:
-  schedule:
-    - cron: 0 20 * * *
-
-permissions:
-  contents: read
+  push:
+    branches: 
+      - master
+   # ↑↑↑ 改成你的分支名, 一般是master
+   # schedule:
+   # - cron: 0 20 * * *
+   # release:
+   # types: [published]
 
 jobs:
-
-  build_openwrt:
-
-    name: Build OpenWrt Firmware
-
+  build:
     runs-on: ubuntu-latest
-  
+
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: master
+         # ↑↑↑ 改成你的分分支分支支名, 一般是master
       - name: Initialization environment
         env:
           DEBIAN_FRONTEND: noninteractive
@@ -67,13 +49,13 @@ jobs:
           
           df -h
             
-      - name: Checkout OpenWrt
-        uses: actions/checkout@v3
+      #- name: Checkout OpenWrt
+       # uses: actions/checkout@v3
 
-      #- name: Update feeds
-       # run: |
+      - name: Update feeds
+        run: |
           # 避免warning
-        #  rm -rf ./feeds1
+          rm -rf ./feeds1
             
       - name: 自定义插件主题
         run: |
