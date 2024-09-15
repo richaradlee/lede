@@ -9,9 +9,9 @@
 
 name: OpenWrt-CI
 
-on:
-  push:
-    branches: 
+#on:
+ # push:
+  #  branches: 
       - master
   # ↑↑↑ 改成你的分支名, 一般是master
   # schedule:
@@ -19,17 +19,32 @@ on:
   # release:
   # types: [published]
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+#jobs:
+ # build:
+  #  runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@master
-        with:
-          ref: master
+   # steps:
+    #  - name: Checkout
+     #   uses: actions/checkout@master
+      #  with:
+       #   ref: master
         # ↑↑↑ 改成你的分分支分支支名, 一般是master
+on:
+  schedule:
+    - cron: 0 20 * * *
 
+permissions:
+  contents: read
+
+jobs:
+
+  build_openwrt:
+
+    name: Build OpenWrt Firmware
+
+    runs-on: ubuntu-latest
+  
+    steps:
       - name: Initialization environment
         env:
           DEBIAN_FRONTEND: noninteractive
@@ -55,10 +70,10 @@ jobs:
       - name: Checkout OpenWrt
         uses: actions/checkout@v3
 
-      - name: Update feeds
-        run: |
+      #- name: Update feeds
+       # run: |
           # 避免warning
-          rm -rf ./feeds1
+        #  rm -rf ./feeds1
             
       - name: 自定义插件主题
         run: |
