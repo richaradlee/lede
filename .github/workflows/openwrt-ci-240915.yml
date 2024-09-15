@@ -52,6 +52,9 @@ jobs:
           
           df -h
             
+      - name: Checkout OpenWrt
+        uses: actions/checkout@v3
+
       - name: Update feeds
         run: |
           # 避免warning
