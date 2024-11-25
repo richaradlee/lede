@@ -214,6 +214,7 @@ jobs:
           CONFIG_PACKAGE_luci-app-advanced=y
           # CONFIG_PACKAGE_luci-app-netspeedtest=y
           CONFIG_PACKAGE_luci-app-msd_lite=y
+          CONFIG_PACKAGE_luci-app-lucky=y
           EOF
          
           # LuCI主题:
