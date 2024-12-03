@@ -1,4 +1,4 @@
-
+ 
 #
 # This is free software, lisence use MIT.
 # 
@@ -295,7 +295,7 @@ jobs:
       - name: Deliver firmware
         uses: actions/upload-artifact@v3
         with:
-          name: OpenWrt_firmware_241203
+          name: OpenWrt_firmware_2412033
           path: ./bin/targets/    
 
       - name: Upload release asset
