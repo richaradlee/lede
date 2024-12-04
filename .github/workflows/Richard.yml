@@ -1,3 +1,12 @@
+- name: Clear Cache
+  uses: actions/cache@v3
+  with:
+    path: |
+      ~/.gradle/caches
+      ~/.gradle/wrapper
+    key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+    restore-keys: |
+      ${{ runner.os }}-gradle-
  
 #
 # This is free software, lisence use MIT.
