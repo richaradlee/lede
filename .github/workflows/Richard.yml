@@ -64,7 +64,7 @@ jobs:
           # git clone https://github.com/jerrykuku/luci-app-vssr.git
           git rm -r --cached .
           git add .
-          git commit -m "Clear cache"
+          # git commit -m "Clear cache"
           cd package/lean
           git clone https://github.com/jerrykuku/luci-theme-argon.git
           # rm -rf luci-theme-argon
