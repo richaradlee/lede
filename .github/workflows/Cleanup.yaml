@@ -1,0 +1,70 @@
+name: Build and Clean Up
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential libncurses5-dev gawk git gettext libssl-dev xsltproc unzip zlib1g-dev file
+
+    - name: Clone OpenWrt source
+      run: |
+        git clone https://github.com/openwrt/openwrt.git
+        cd openwrt
+        ./scripts/feeds update -a
+        ./scripts/feeds install -a
+
+    - name: Configure build
+      run: |
+        cd openwrt
+        make menuconfig
+
+    - name: Build OpenWrt
+      run: |
+        cd openwrt
+        make -j$(nproc)
+
+    - name: Upload firmware to GitHub Releases
+      uses: softprops/action-gh-release@v2
+      with:
+        files: openwrt/bin/targets/*/*/*.bin
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Cleanup workspace
+      run: |
+        sudo apt-get clean
+        sudo rm -rf /var/lib/apt/lists/*
+        sudo rm -rf /tmp/*
+        sudo rm -rf /var/tmp/*
+        sudo docker system prune --all --force
+        sudo rm -rf $GITHUB_WORKSPACE/*
+
+    - name: Cache dependencies
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/.npm
+          ~/.cache
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+    - name: Delete old workflow runs
+      uses: Mattraks/delete-workflow-runs@main
+      with:
+        retain_days: 7
+        
