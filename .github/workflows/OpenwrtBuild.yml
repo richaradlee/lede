@@ -132,6 +132,7 @@ jobs:
           rm -rf feeds/packages/lang/golang
           git clone https://github.com/kenzok8/golang feeds/packages/lang/golang
           git clone https://github.com/gdy666/luci-app-lucky.git package/lucky
+          sudo dpkg --remove /tmp/apt-dpkg-install-tcM42F/432-tex-gyre_20180621-6_all.deb
           ./scripts/feeds update -a
           ./scripts/feeds install -a
 
