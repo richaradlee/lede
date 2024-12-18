@@ -133,6 +133,11 @@ jobs:
           git clone https://github.com/kenzok8/golang feeds/packages/lang/golang
           git clone https://github.com/gdy666/luci-app-lucky.git package/lucky
           sudo dpkg --remove /tmp/apt-dpkg-install-tcM42F/432-tex-gyre_20180621-6_all.deb
+          # 处理可能的安装错误 
+          if [ $? -ne 0 ]; then 
+          echo "遇到安装错误，尝试移除部分安装的软件包..."
+          sudo dpkg --remove /tmp/apt-dpkg-install-ke5iyv/432-tex-gyre_20180621-6_all.deb # 修复损坏的依赖 
+          sudo apt-get -f install fi
           ./scripts/feeds update -a
           ./scripts/feeds install -a
 
