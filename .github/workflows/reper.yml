@@ -1,0 +1,39 @@
+name: Clean and Fetch New Source
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Clean working directory
+      run: |
+        git reset --hard
+        git clean -fdx
+
+    - name: Fetch new source code
+      run: |
+        git fetch --all
+        git pull origin main
+
+    - name: Setup build environment
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential
+
+    - name: Build project
+      run: |
+        # Add your build commands here
+        make -j$(nproc)
