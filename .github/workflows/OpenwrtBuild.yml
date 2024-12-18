@@ -47,30 +47,11 @@ jobs:
 
     steps:
 
-    name: Build and Release OpenWrt Firmware
+      - name: Clean up and prepare build environment
+        run: |
+         sudo apt-get clean
+         sudo apt-get autoremove
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-
-env:
-  TZ: Asia/Shanghai
-
-jobs:
-  build:
-    runs-on: ubuntu-24.04  # 指定运行环境
-
-    - name: Clean up and prepare build environment
-      run: |
-        sudo apt-get clean
-        sudo apt-get autoremove
-        sudo apt-get update
-        sudo apt-get install -y build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs git-core gcc-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake device-tree-compiler gcc-10 g++-10
- 
       - name: Check Server Performance
         run: |
           echo "警告⚠"
@@ -105,9 +86,7 @@ jobs:
           npm_prune: "True"
           npm_clean: "True"
           os_swap: "True"
-          sudo apt-get clean 
-          sudo apt-get autoremove
-  
+ 
       - name: Freeing up disk space
         uses: easimon/maximize-build-space@master
         with: 
