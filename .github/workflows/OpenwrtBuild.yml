@@ -98,7 +98,7 @@ jobs:
            ccache: 'true'
            mixkey: 'unique-mixkey-value'
            clean: 'true'
-           prefix: 'unique-prefix-value'
+           prefix: '/home/runner/work/lede/lede'
 
       - name: Get new themes
         run: |
