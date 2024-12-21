@@ -34,16 +34,15 @@ permissions:
   contents: read
 
 jobs:
-  build_openwrt:
-
-    permissions:
-      contents: write # for release creation
-    
-    name: Build OpenWrt firmware
-
+  merge:
     runs-on: ubuntu-latest
+    if: github.event.repository.owner.id == github.event.sender.id
 
-    if: github.event.repository.owner.id == github.event.sender.id || ! github.event.sender.id
+    name: Build ${{matrix.target}}
+    strategy:
+      fail-fast: false
+      matrix:
+         target: [Lean]
 
     steps:
 
@@ -91,14 +90,6 @@ jobs:
           git clone https://github.com/gdy666/luci-app-lucky.git package/lucky
           ./scripts/feeds update -a
           ./scripts/feeds install -a
-
-      - name: Cache
-        uses: stupidloud/cachewrtbuild@main
-        with:
-           ccache: 'true'
-           mixkey: 'unique-mixkey-value'
-           clean: 'true'
-           prefix: '/home/runner/work/lede/lede'
 
       - name: Get new themes
         run: |
@@ -309,6 +300,13 @@ jobs:
           make download -j8
           find dl -size -1024c -exec rm -f {} \;
 
+      - name: Cache
+        uses: stupidloud/cachewrtbuild@main
+        with:
+          ccache: 'true'
+          mixkey: ${{ matrix.target }}
+          clean: ${{ contains(github.event.action, 'nocache') }}
+          prefix: ${{ github.workspace }}/openwrt
 
       - name: Compile firmware
         run: |
@@ -331,18 +329,6 @@ jobs:
           cp -rf $(find ./bin/targets/ -type f) ./artifact/firmware/
           cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./artifact/package/
           cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
-
-      - name: Deliver buildinfo
-        uses: actions/upload-artifact@v4
-        with:
-          name: OpenWrt_buildinfo
-          path: ./artifact/buildinfo/
-
-      - name: Deliver package
-        uses: actions/upload-artifact@v4
-        with:
-          name: OpenWrt_package
-          path: ./artifact/package/
 
       - name: Deliver firmware
         uses: actions/upload-artifact@v4
