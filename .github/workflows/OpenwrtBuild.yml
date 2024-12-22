@@ -303,10 +303,10 @@ jobs:
       - name: Cache
         uses: stupidloud/cachewrtbuild@main
         with:
-          ccache: 'true'
-          mixkey: ${{ matrix.target }}
-          clean: ${{ contains(github.event.action, 'nocache') }}
-          prefix: ${{ github.workspace }}/openwrt
+           ccache: 'true'
+           mixkey: 'unique-mixkey-value'
+           clean: 'true'
+           prefix: '/home/runner/work/lede/lede'
 
       - name: Compile firmware
         run: |
