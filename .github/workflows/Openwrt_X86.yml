@@ -8,22 +8,13 @@
 #
 
 name: OpenWrt_x86_6.12.x
+
 on:
   push:
     branches:
       - master
-  schedule:
-      - cron: 0 9 * * SAT
   release:
       types: [published]
-
-env:
-  UPLOAD_BIN_DIR: false
-  UPLOAD_FIRMWARE: true
-  UPLOAD_COWTRANSFER: false
-  UPLOAD_WETRANSFER: false
-  UPLOAD_RELEASE: true
-  TZ: Asia/Shanghai
 
 jobs:
   build:
@@ -54,7 +45,6 @@ jobs:
          echo -e "$(sudo lshw -short -C memory | grep GiB)\n"
          echo "--------------------------硬盘信息--------------------------"
          echo "硬盘数量: $(ls /dev/sd* | grep -v [1-9] | wc -l)" && df -hT
-
       - name: Initialization environment
         env:
           DEBIAN_FRONTEND: noninteractive
@@ -69,12 +59,15 @@ jobs:
           sudo -E apt-get clean
           sudo -E timedatectl set-timezone "Asia/Shanghai"
           
-      - name: Maximize build space
-        uses: easimon/maximize-build-space@master
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
         with:
-          root-reserve-mb: 512
-          swap-size-mb: 1024
-          remove-dotnet: 'true'
+          tool-cache: true
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          swap-storage: true
       
       - name: Checkout
         uses: actions/checkout@v4
@@ -84,7 +77,6 @@ jobs:
           echo "Free space:"
           df -h
           date
-
       - name: Get current date
         id: date
         run: |
@@ -102,6 +94,18 @@ jobs:
           git -C package/helloworld pull
           df -h
           ls -sh
+      #- name: Free up disk space
+        #run: |
+          #sudo mkdir -p -m 777 /mnt/openwrt/dl /mnt/openwrt/bin /mnt/openwrt/staging_dir
+          #ln -sf /mnt/openwrt/dl dl
+          #ln -sf /mnt/openwrt/bin bin
+          #ln -sf /mnt/openwrt/staging_dir staging_dir
+
+          #echo "Symlinks created:"
+          #ls -l
+          #echo ""
+          #echo "Disk usage:"
+          #df -h
 
       - name: Update feeds
         run: |
@@ -118,7 +122,6 @@ jobs:
           ./scripts/feeds update -a
           ./scripts/feeds install -a
           cat ./feeds.conf.default
-
       - name: Get new themes
         run: |
           rm -rf package/feeds/luci/luci-theme-argon
@@ -144,7 +147,6 @@ jobs:
           CONFIG_TARGET_x86_64_Generic=y
           CONFIG_TESTING_KERNEL=n
           EOF
-
           # 固件大小设置:
           cat >> .config <<EOF
           CONFIG_TARGET_KERNEL_PARTSIZE=128
@@ -153,7 +155,7 @@ jobs:
           
           # 固件压缩:
           cat >> .config <<EOF
-          CONFIG_TARGET_IMAGES_GZIP=n
+          CONFIG_TARGET_IMAGES_GZIP=y
           EOF
           
           # 编译UEFI固件:
@@ -238,8 +240,8 @@ jobs:
           # CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_ShadowsocksR_Socks=y
           # CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_V2ray=y
           CONFIG_PACKAGE_luci-app-ssr-plus=y
-          CONFIG_PACKAGE_luci-app-passwall=y
-          # CONFIG_PACKAGE_luci-app-passwall2=y 
+          CONFIG_PACKAGE_luci-app-passwall=n
+          CONFIG_PACKAGE_luci-app-passwall2=y 
           CONFIG_PACKAGE_luci-app-openclash=y
           # CONFIG_PACKAGE_luci-app-mihomo=y
           # CONFIG_PACKAGE_luci-app-homeproxy=y
@@ -294,6 +296,7 @@ jobs:
           CONFIG_PACKAGE_tcpdump=y
           CONFIG_PACKAGE_pv=y
           CONFIG_PACKAGE_bind-host=y
+          CONFIG_PACKAGE_firewall4=y
           EOF
           
           # 取消编译VMware镜像以及镜像填充 (不要删除被缩进的注释符号):
@@ -312,7 +315,6 @@ jobs:
           make download -j8
           find ./dl/ -size -1024c -exec rm -f {} \;
           df -h
-
       - name: Cache OpenWrt Build
         uses: stupidloud/cachewrtbuild@main
         with:
@@ -320,8 +322,10 @@ jobs:
           mixkey: ${{ matrix.target }}
           clean: ${{ contains(github.event.action, 'nocache') }}
           prefix: ${{ github.workspace }}
-          toolchain: 'true'
-     
+          toolchain: 'true'       
+          skip: 'true'
+          skip_saving: 'false'
+
       - name: Compile firmware
         run: |
           make -j$(nproc) || make -j16 V=s
@@ -371,7 +375,7 @@ jobs:
           repo_token: ${{ secrets.SEARIY_TOKEN }}
           file: ./artifact/firmware/*
           tag: ${{ github.ref }}
-          file_glob: true
+          file_glob: 'true'
 
       - name: Delete workflow runs
         uses: Mattraks/delete-workflow-runs@main
